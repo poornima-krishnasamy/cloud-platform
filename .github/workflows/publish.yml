@@ -1,11 +1,8 @@
 name: Publish runbooks
 
 on:
-  push:
-    branches:
-      - "main"
-    paths:
-      - "runbooks/**"
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
 
 jobs:
   run:
@@ -16,10 +13,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build
       run: cd runbooks; bundle exec middleman build --build-dir docs
-    - name: Run the script
-      run: cd runbooks; bin/publish.sh
       env:
-        PUBLISHING_GIT_TOKEN: ${{ secrets.PUBLISHING_GIT_TOKEN }}
         GITHUB_PAGES_REPO_OWNER: ministryofjustice
         GITHUB_PAGES_REPO_AUTHOR: cloud-platform-moj
         GITHUB_PAGES_REPO_AUTHOR_EMAIL: platforms@digital.justice.gov.uk
